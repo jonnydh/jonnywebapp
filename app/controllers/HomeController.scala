@@ -22,10 +22,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def about(): Action[AnyContent] = Action {
-    Ok(views.html.about())
-  }
-
   def redirect(): Action[AnyContent] = Action {
     Redirect(("/"))
   }
