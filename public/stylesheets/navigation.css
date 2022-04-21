@@ -1,0 +1,27 @@
+.menu ul {
+    list-style-type: circle;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #28a197;
+}
+
+.menu li {
+    display: inline;
+    float: left;
+    padding: 0px;
+}
+
+.menu li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: Arial;
+}
+
+.menu li a:hover {
+  background-color: black;
+}
