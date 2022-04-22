@@ -8,6 +8,7 @@ GET     /                           controllers.HomeController.index()
 GET     /pointless/redirect         controllers.HomeController.redirect()
 
 GET     /form                       controllers.FormController.form()
+POST    /form                       controllers.FormController.formPost()
 
 GET     /submissions                controllers.DataController.submissions()
 
