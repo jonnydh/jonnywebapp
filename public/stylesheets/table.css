@@ -1,0 +1,23 @@
+.table {
+    border-collapse: collapse;
+    border: 2px solid;
+    margin: 40px 0;
+    font-size: 2.0em;
+    font-family: arial;
+    min-width: 300px;
+    box-shadow: 5 5 25px rgba(10, 10, 10, 0.2);
+    border-color: black;
+}
+
+.table th,
+.table td {
+    padding: 15px 15px;
+    border: 2px solid;
+}
+
+.table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+
+

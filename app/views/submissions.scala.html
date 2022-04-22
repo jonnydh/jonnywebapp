@@ -1,5 +1,23 @@
-@()
+@(database: scala.collection.mutable.ListBuffer[DataModel])
 
 @main("Welcome to Play") {
+<link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
 <h1>This is where the data will be returned</h1>
+
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Message</th>
+    </tr>
+        @for(entry <- database) {
+            <tr>
+                <td>@entry.name</td>
+                <td>@entry.age</td>
+                <td>@entry.message</td>
+            </tr>
+        }
+</table>
 }
+
