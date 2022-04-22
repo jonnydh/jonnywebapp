@@ -35,4 +35,8 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
     database += formData
     Ok(views.html.index())
   }
+
+  def submissions() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.submissions(database))
+  }
 }
