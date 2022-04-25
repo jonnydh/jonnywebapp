@@ -1,6 +1,9 @@
 @(database: scala.collection.mutable.ListBuffer[DataModel])
 
+@import viewHelpers.formatHelper
+
 @main("Welcome to Play") {
+
 <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
 <h1>This is where the data will be returned</h1>
 
@@ -18,8 +21,8 @@
                 <td>@entry.name</td>
                 <td>@entry.age</td>
                 <td>@entry.message</td>
-                <td>@entry.timestamp</td>
-                <td>@entry.datestamp</td>
+                <td>@viewHelpers.formatHelper.timeFormatter(entry.timestamp)</td>
+                <td>@viewHelpers.formatHelper.dateFormatter(entry.timestamp)</td>
             </tr>
         }
 </table>
