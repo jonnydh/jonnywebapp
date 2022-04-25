@@ -10,12 +10,16 @@
         <th>Name</th>
         <th>Age</th>
         <th>Message</th>
+        <th>Time</th>
+        <th>Date</th>
     </tr>
         @for(entry <- database) {
             <tr>
                 <td>@entry.name</td>
                 <td>@entry.age</td>
                 <td>@entry.message</td>
+                <td>@entry.timestamp</td>
+                <td>@entry.datestamp</td>
             </tr>
         }
 </table>
