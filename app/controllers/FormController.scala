@@ -6,6 +6,8 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import play.api.data.validation.Constraints._
+import services.DataService
+
 import scala.collection.mutable.ListBuffer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -13,10 +15,7 @@ import java.time.format.DateTimeFormatter
 case class DataModel(name: String, age: Int, message: String, timestamp: Option[LocalDateTime])
 
 @Singleton
-class FormController @Inject() (cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
-
-  //Fake Database
-  val database = new ListBuffer[DataModel]()
+class FormController @Inject() (dataService: DataService, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   val dataForm = Form(
     mapping(
@@ -41,13 +40,16 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
       formSuccess => {
         val dateTime = LocalDateTime.now()
         val timestampedForm = formSuccess.copy(timestamp = Option(dateTime))
-        database += timestampedForm
+        dataService.insert(timestampedForm)
         Redirect(routes.HomeController.index())
       }
     )
   }
 
-  def submissions() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.submissions(database))
+  def submissions(name: Option[String] = None)  = Action { implicit request: Request[AnyContent] =>
+    val query = request.getQueryString(key="name")
+    val queryResult = dataService.search(query)
+    Ok(views.html.submissions(queryResult))
   }
+
 }
