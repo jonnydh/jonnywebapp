@@ -10,7 +10,7 @@ import scala.collection.mutable.ListBuffer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-case class DataModel(name: String, age: String, message: String, timestamp: Option[LocalDateTime])
+case class DataModel(name: String, age: Int, message: String, timestamp: Option[LocalDateTime])
 
 @Singleton
 class FormController @Inject() (cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
@@ -20,9 +20,9 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
 
   val dataForm = Form(
     mapping(
-      "name" -> nonEmptyText,
-      "age" -> nonEmptyText,
-      "message" -> nonEmptyText,
+      "name" -> nonEmptyText(maxLength = 100),
+      "age" -> number(min = 0, max = 123),
+      "message" -> nonEmptyText(maxLength = 500),
       "timestamp" -> optional(localDateTime),
     )(DataModel.apply)(DataModel.unapply)
   )
@@ -34,11 +34,17 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
   }
 
   def formPost() = Action { implicit request =>
-    val formData = dataForm.bindFromRequest.get
-    val dateTime = LocalDateTime.now()
-    val timestampedForm = formData.copy(timestamp = Option(dateTime))
-    database += timestampedForm
-    Ok(views.html.index())
+    dataForm.bindFromRequest.fold(
+      formWithErrors => {
+        BadRequest(views.html.form(formWithErrors))
+      },
+      formSuccess => {
+        val dateTime = LocalDateTime.now()
+        val timestampedForm = formSuccess.copy(timestamp = Option(dateTime))
+        database += timestampedForm
+        Redirect(routes.HomeController.index())
+      }
+    )
   }
 
   def submissions() = Action { implicit request: Request[AnyContent] =>
