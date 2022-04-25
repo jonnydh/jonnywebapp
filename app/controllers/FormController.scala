@@ -7,24 +7,25 @@ import play.api.data.Forms._
 import play.api.mvc._
 import play.api.data.validation.Constraints._
 import scala.collection.mutable.ListBuffer
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
-case class DataModel(name: String, age: String, message: String, timestamp: Option[String], datestamp: Option[String])
+case class DataModel(name: String, age: String, message: String, timestamp: Option[LocalTime], datestamp: Option[LocalDate])
 
 @Singleton
 class FormController @Inject() (cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   //Fake Database
-  var database = new ListBuffer[DataModel]()
+  val database = new ListBuffer[DataModel]()
 
   val dataForm = Form(
     mapping(
       "name" -> nonEmptyText,
       "age" -> nonEmptyText,
       "message" -> nonEmptyText,
-      "timestamp" -> optional(text),
-      "datestamp" -> optional(text)
+      "timestamp" -> optional(localTime),
+      "datestamp" -> optional(localDate)
     )(DataModel.apply)(DataModel.unapply)
   )
 
@@ -34,22 +35,13 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
     Ok(views.html.form(dataForm))
   }
 
-  def timeFormatter(time: LocalDateTime) = {
-    val timeFormatter = DateTimeFormatter.ofPattern("kk:mm:ss")
-    time.format(timeFormatter)
-  }
-
-  def dateFormatter(date: LocalDateTime) = {
-    val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    date.format(dateFormatter)
-  }
-
   def formPost() = Action { implicit request =>
     val formData = dataForm.bindFromRequest.get
-    val dateTime = LocalDateTime.now()
+    val date = LocalDate.now()
+    val time = LocalTime.now().truncatedTo(ChronoUnit.SECONDS)
     val timestampedForm = formData.copy(
-                                        timestamp = Option(timeFormatter(dateTime)),
-                                        datestamp = Option(dateFormatter(dateTime))
+                                        timestamp = Option(time),
+                                        datestamp = Option(date)
                                         )
     database += timestampedForm
     Ok(views.html.index())
