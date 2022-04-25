@@ -7,11 +7,10 @@ import play.api.data.Forms._
 import play.api.mvc._
 import play.api.data.validation.Constraints._
 import scala.collection.mutable.ListBuffer
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-case class DataModel(name: String, age: String, message: String, timestamp: Option[LocalTime], datestamp: Option[LocalDate])
+case class DataModel(name: String, age: String, message: String, timestamp: Option[LocalDateTime])
 
 @Singleton
 class FormController @Inject() (cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
@@ -24,8 +23,7 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
       "name" -> nonEmptyText,
       "age" -> nonEmptyText,
       "message" -> nonEmptyText,
-      "timestamp" -> optional(localTime),
-      "datestamp" -> optional(localDate)
+      "timestamp" -> optional(localDateTime),
     )(DataModel.apply)(DataModel.unapply)
   )
 
@@ -37,12 +35,8 @@ class FormController @Inject() (cc: ControllerComponents) extends AbstractContro
 
   def formPost() = Action { implicit request =>
     val formData = dataForm.bindFromRequest.get
-    val date = LocalDate.now()
-    val time = LocalTime.now().truncatedTo(ChronoUnit.SECONDS)
-    val timestampedForm = formData.copy(
-                                        timestamp = Option(time),
-                                        datestamp = Option(date)
-                                        )
+    val dateTime = LocalDateTime.now()
+    val timestampedForm = formData.copy(timestamp = Option(dateTime))
     database += timestampedForm
     Ok(views.html.index())
   }
