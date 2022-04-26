@@ -1,4 +1,4 @@
-@(database: scala.collection.mutable.ListBuffer[DataModel])
+@(queryResult: scala.collection.mutable.ListBuffer[DataModel])
 
 @import viewHelpers.formatHelper
 
@@ -6,6 +6,11 @@
 
 <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
 <h1>This is where the data will be returned</h1>
+
+@helper.form(action = routes.FormController.submissions()) {
+    <input type="text" name="name" id="name">
+    <input type="submit" value="filter">
+}
 
 
 <table class="table">
@@ -16,7 +21,7 @@
         <th>Time</th>
         <th>Date</th>
     </tr>
-        @for(entry <- database) {
+        @for(entry <- queryResult) {
             <tr>
                 <td>@entry.name</td>
                 <td>@entry.age</td>
