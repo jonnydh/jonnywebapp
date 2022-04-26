@@ -46,10 +46,4 @@ class FormController @Inject() (dataService: DataService, cc: ControllerComponen
     )
   }
 
-  def submissions(name: Option[String] = None)  = Action { implicit request: Request[AnyContent] =>
-    val query = request.getQueryString(key="name")
-    val queryResult = dataService.search(query)
-    Ok(views.html.submissions(queryResult))
-  }
-
 }
