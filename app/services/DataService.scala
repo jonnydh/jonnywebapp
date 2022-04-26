@@ -11,16 +11,9 @@ class DataService @Inject() () {
 
   def insert(record: DataModel): Unit = {
     database += record
-    println("State of database after insert:")
-    println(database)
-    println(this)
   }
 
   def search(maybeName: Option[String] = None): ListBuffer[DataModel] = {
-    println("State of database before search:")
-    println(database)
-    println(this)
     maybeName.fold(database)(name => database.filter(_.name.equalsIgnoreCase(name)))
-
   }
 }
