@@ -1,10 +1,12 @@
 package services
 
 import controllers.DataModel
+import javax.inject._
 
 import scala.collection.mutable.ListBuffer
 
-class DataService {
+@Singleton
+class DataService @Inject() () {
   val database = new ListBuffer[DataModel]()
 
   def insert(record: DataModel): Unit = {
