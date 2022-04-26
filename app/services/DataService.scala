@@ -14,9 +14,9 @@ class DataService @Inject() () {
   }
 
   def search(maybeName: Option[String] = None, maybeAge: Option[String], maybeMessage: Option[String]): ListBuffer[DataModel] = {
-    val cleansedMaybeName = convertEmptyInputToNull(maybeName)
-    val cleansedMaybeAge = convertEmptyInputToNull(maybeAge)
-    val cleansedMaybeMessage = convertEmptyInputToNull(maybeMessage)
+    val cleansedMaybeName = convertEmptyInputToNone(maybeName)
+    val cleansedMaybeAge = convertEmptyInputToNone(maybeAge)
+    val cleansedMaybeMessage = convertEmptyInputToNone(maybeMessage)
 
     val predicates: List[DataModel => Boolean] = List(
       cleansedMaybeName.map(name => (record: DataModel) => record.name.equalsIgnoreCase(name)),
@@ -27,6 +27,6 @@ class DataService @Inject() () {
     database.filter(record => predicates.forall(predicate => predicate(record)))
   }
 
-  def convertEmptyInputToNull(input: Option[String]): Option[String] = input.filter(_.nonEmpty)
+  def convertEmptyInputToNone(input: Option[String]): Option[String] = input.filter(_.nonEmpty)
 }
 
