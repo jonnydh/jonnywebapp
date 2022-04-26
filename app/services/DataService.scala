@@ -13,7 +13,20 @@ class DataService @Inject() () {
     database += record
   }
 
-  def search(maybeName: Option[String] = None): ListBuffer[DataModel] = {
-    maybeName.fold(database)(name => database.filter(_.name.equalsIgnoreCase(name)))
+  def search(maybeName: Option[String] = None, maybeAge: Option[String], maybeMessage: Option[String]): ListBuffer[DataModel] = {
+    val cleansedMaybeName = convertEmptyInputToNull(maybeName)
+    val cleansedMaybeAge = convertEmptyInputToNull(maybeAge)
+    val cleansedMaybeMessage = convertEmptyInputToNull(maybeMessage)
+
+    val predicates: List[DataModel => Boolean] = List(
+      cleansedMaybeName.map(name => (record: DataModel) => record.name.equalsIgnoreCase(name)),
+      cleansedMaybeAge.map(age => (record: DataModel) => record.age.equals(age.toInt)),
+      cleansedMaybeMessage.map(message => (record:DataModel) => record.message.contains(message))
+    ).flatten
+
+    database.filter(record => predicates.forall(predicate => predicate(record)))
   }
+
+  def convertEmptyInputToNull(input: Option[String]): Option[String] = input.filter(_.nonEmpty)
 }
+
