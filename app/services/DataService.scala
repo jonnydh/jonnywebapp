@@ -13,6 +13,11 @@ class DataService @Inject() () {
     database += record
   }
 
+  def isEmpty(): Boolean = {
+    println(database.isEmpty)
+    database.isEmpty
+  }
+
   def search(maybeName: Option[String] = None, maybeAge: Option[String], maybeMessage: Option[String]): ListBuffer[DataModel] = {
     val predicates: List[DataModel => Boolean] = List(
       maybeName.filter(_.nonEmpty).map(name => (record: DataModel) => record.name.equalsIgnoreCase(name)),
@@ -22,5 +27,9 @@ class DataService @Inject() () {
 
     database.filter(record => predicates.forall(predicate => predicate(record)))
   }
-}
 
+  def firstPost(): DataModel = database.head
+
+  def userWithMostPosts(): (String, Int) = database.groupBy(identity => identity.name).view.mapValues(_.size).maxBy(_._2)
+
+}

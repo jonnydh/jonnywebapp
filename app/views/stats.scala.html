@@ -1,0 +1,39 @@
+@(oldestPost: DataModel, mostPosts: Tuple2[String, Int])
+
+@import viewHelpers.formatHelper
+
+@main("Jonny Stats Page") {
+
+<link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
+<h1>The oldest post in the database is:</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@oldestPost.name</td>
+    <td>@oldestPost.age</td>
+    <td>@oldestPost.message</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(oldestPost.timestamp)</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(oldestPost.timestamp)</td>
+  </tr>
+</table>
+
+<h2>The user with the most posts is:</h2>
+
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Number of posts</th>
+  </tr>
+  <tr>
+    <td>@mostPosts._1</td>
+    <td>@mostPosts._2</td>
+  </tr>
+</table>
+}

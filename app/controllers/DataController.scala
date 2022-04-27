@@ -12,4 +12,14 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
     val queryResult = dataService.search(name, age, message)
     Ok(views.html.submissions(queryResult))
   }
+
+  def stats() = Action {implicit request: Request[AnyContent] =>
+    dataService.isEmpty() match {
+      case true => Ok(views.html.emptystats())
+      case false => Ok(views.html.stats(dataService.firstPost(),
+                                        dataService.userWithMostPosts()
+                                        ))
+    }
+  }
+
 }
