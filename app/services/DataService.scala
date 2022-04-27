@@ -29,7 +29,9 @@ class DataService @Inject() () {
 
   def firstPost(): DataModel = database.head
 
-  def userWithMostPosts(): (String, Int) = database.groupBy(identity => identity.name).view.mapValues(_.size).maxBy(_._2)
+  def userWithMostPosts(): (String, Int) = database.groupBy(identity => identity.name)
+    .view.mapValues(_.size)
+    .maxBy(_._2)
 
   def longestMessage(): (DataModel, Int) = {
     val post = database.sortBy(record => record.message.length()).last
@@ -46,6 +48,13 @@ class DataService @Inject() () {
   def postsPerUser(): List[(String, Int)] = database.groupBy(identity => identity.name)
     .view.mapValues(_.size)
     .toList
+    .sortBy(_._2)
+    .reverse
+
+  def totalCharsPerUser(): List[(String, Int)] = database.groupBy(identity => identity.name)
+    .view.mapValues(groupedByName => groupedByName.map(record => record.message.length))
+    .toList
+    .map(tup => (tup._1, tup._2.reduce((a,b) => a + b)))
     .sortBy(_._2)
     .reverse
 

@@ -2,7 +2,9 @@
 mostPosts: Tuple2[String, Int],
 longestMessage: Tuple2[DataModel, Int],
 shortestMessage: Tuple2[DataModel, Int],
-postsPerUser: List[(String, Int)])
+postsPerUser: List[(String, Int)],
+totalMessageCharsPerUser: List[(String, Int)]
+)
 
 @import viewHelpers.formatHelper
 
@@ -94,6 +96,20 @@ postsPerUser: List[(String, Int)])
       <td>@tuple._1</td>
       <td>@tuple._2</td>
     </tr>
+  }
+</table>
+
+<h2>Total message characters per user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Total number of characters</th>
+  </tr>
+  @for(tuple <- totalMessageCharsPerUser) {
+  <tr>
+    <td>@tuple._1</td>
+    <td>@tuple._2</td>
+  </tr>
   }
 </table>
 

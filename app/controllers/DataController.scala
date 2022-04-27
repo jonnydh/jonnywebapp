@@ -20,7 +20,8 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
                                         dataService.userWithMostPosts(),
                                         dataService.longestMessage(),
                                         dataService.shortestMessage(),
-                                        dataService.postsPerUser()
+                                        dataService.postsPerUser(),
+                                        dataService.totalCharsPerUser()
                                         ))
     }
   }
