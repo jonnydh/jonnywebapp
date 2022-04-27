@@ -14,7 +14,6 @@ class DataService @Inject() () {
   }
 
   def isEmpty(): Boolean = {
-    println(database.isEmpty)
     database.isEmpty
   }
 
@@ -31,5 +30,4 @@ class DataService @Inject() () {
   def firstPost(): DataModel = database.head
 
   def userWithMostPosts(): (String, Int) = database.groupBy(identity => identity.name).view.mapValues(_.size).maxBy(_._2)
-
 }
