@@ -1,4 +1,7 @@
-@(oldestPost: DataModel, mostPosts: Tuple2[String, Int])
+@(oldestPost: DataModel,
+mostPosts: Tuple2[String, Int],
+longestMessage: Tuple2[DataModel, Int],
+shortestMessage: Tuple2[DataModel, Int])
 
 @import viewHelpers.formatHelper
 
@@ -36,4 +39,47 @@
     <td>@mostPosts._2</td>
   </tr>
 </table>
+
+<h2>The post with the longest message in the database is:</h2>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@longestMessage._1.name</td>
+    <td>@longestMessage._1.age</td>
+    <td>@longestMessage._1.message</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(longestMessage._1.timestamp)</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(longestMessage._1.timestamp)</td>
+  </tr>
+</table>
+
+<h3>It is @longestMessage._2 characters long! Can you believe it?</h3>
+
+<h2>The post with the shortest message in the database is:</h2>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@shortestMessage._1.name</td>
+    <td>@shortestMessage._1.age</td>
+    <td>@shortestMessage._1.message</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(shortestMessage._1.timestamp)</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(shortestMessage._1.timestamp)</td>
+  </tr>
+</table>
+
+<h3>It is @shortestMessage._2 characters long! Is that it?</h3>
+
 }

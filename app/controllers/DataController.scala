@@ -17,7 +17,9 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
     dataService.isEmpty() match {
       case true => Ok(views.html.emptystats())
       case false => Ok(views.html.stats(dataService.firstPost(),
-                                        dataService.userWithMostPosts()
+                                        dataService.userWithMostPosts(),
+                                        dataService.longestMessage(),
+                                        dataService.shortestMessage()
                                         ))
     }
   }
