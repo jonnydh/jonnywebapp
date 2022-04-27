@@ -8,8 +8,13 @@
 <h1>This is where the data will be returned</h1>
 
 @helper.form(action = routes.DataController.submissions()) {
-    <input type="text" name="name" id="name">
-    <input type="submit" value="filter">
+    <label for="name">Filter by name:</label><br><br>
+    <input type="text" name="name" id="name"><br><br>
+    <label for="age">Filter by age:</label><br><br>
+    <input type="text" name="age" id="age"><br><br><br>
+    <label for="message">Filter for messages containing:</label><br><br>
+    <input type="text" name="message" id="message"><br><br><br>
+    <input type="submit" value="Filter">
 }
 
 
