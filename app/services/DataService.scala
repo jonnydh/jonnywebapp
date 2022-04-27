@@ -21,7 +21,7 @@ class DataService @Inject() () {
     val predicates: List[DataModel => Boolean] = List(
       maybeName.filter(_.nonEmpty).map(name => (record: DataModel) => record.name.equalsIgnoreCase(name)),
       maybeAge.filter(_.nonEmpty).map(age => (record: DataModel) => record.age.equals(age.toInt)),
-      maybeMessage.filter(_.nonEmpty).map(message => (record:DataModel) => record.message.contains(message))
+      maybeMessage.filter(_.nonEmpty).map(message => (record: DataModel) => record.message.contains(message))
     ).flatten
 
     database.filter(record => predicates.forall(predicate => predicate(record)))
@@ -42,4 +42,11 @@ class DataService @Inject() () {
     val messageLength = post.message.length
     (post, messageLength)
   }
+
+  def postsPerUser(): List[(String, Int)] = database.groupBy(identity => identity.name)
+    .view.mapValues(_.size)
+    .toList
+    .sortBy(_._2)
+    .reverse
+
 }

@@ -19,7 +19,8 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
       case false => Ok(views.html.stats(dataService.firstPost(),
                                         dataService.userWithMostPosts(),
                                         dataService.longestMessage(),
-                                        dataService.shortestMessage()
+                                        dataService.shortestMessage(),
+                                        dataService.postsPerUser()
                                         ))
     }
   }

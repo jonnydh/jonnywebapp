@@ -1,7 +1,8 @@
 @(oldestPost: DataModel,
 mostPosts: Tuple2[String, Int],
 longestMessage: Tuple2[DataModel, Int],
-shortestMessage: Tuple2[DataModel, Int])
+shortestMessage: Tuple2[DataModel, Int],
+postsPerUser: List[(String, Int)])
 
 @import viewHelpers.formatHelper
 
@@ -81,5 +82,19 @@ shortestMessage: Tuple2[DataModel, Int])
 </table>
 
 <h3>It is @shortestMessage._2 characters long! Is that it?</h3>
+
+<h2>Posts per user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Number of posts</th>
+  </tr>
+  @for(tuple <- postsPerUser) {
+    <tr>
+      <td>@tuple._1</td>
+      <td>@tuple._2</td>
+    </tr>
+  }
+</table>
 
 }
