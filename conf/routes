@@ -10,7 +10,7 @@ GET     /pointless/redirect         controllers.HomeController.redirect()
 GET     /form                       controllers.FormController.form()
 POST    /form                       controllers.FormController.formPost()
 
-GET     /submissions                controllers.DataController.submissions()
+GET     /submissions                controllers.DataController.submissions(name: Option[String] ?= None, age: Option[String] ?= None, message: Option[String] ?= None)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
