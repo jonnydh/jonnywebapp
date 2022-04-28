@@ -10,7 +10,6 @@ import services.DataService
 
 import scala.collection.mutable.ListBuffer
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 case class DataModel(name: String, age: Int, message: String, timestamp: Option[LocalDateTime])
 

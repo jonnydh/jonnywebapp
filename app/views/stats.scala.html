@@ -1,0 +1,129 @@
+@(oldestPost: Option[DataModel],
+mostPosts: Tuple2[String, Int],
+longestMessage: Option[Tuple2[DataModel, Int]],
+shortestMessage: Option[Tuple2[DataModel, Int]],
+postsPerUser: List[(String, Int)],
+totalMessageCharsPerUser: List[(String, Int)],
+recentPostByUser: List[(String, Option[DataModel])]
+)
+
+@import viewHelpers.formatHelper
+
+@main("Jonny Stats Page") {
+
+<link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
+<h1>The oldest post in the database is:</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@oldestPost.map(post => post.name).getOrElse("No Data")</td>
+    <td>@oldestPost.map(post => post.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
+  </tr>
+</table>
+
+<h2>The user with the most posts is:</h2>
+
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Number of posts</th>
+  </tr>
+  <tr>
+    <td>@mostPosts._1</td>
+    <td>@mostPosts._2</td>
+  </tr>
+</table>
+
+<h2>The post with the longest message in the database is:</h2>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@longestMessage.map(tpl => tpl._1.name).getOrElse("No data")</td>
+    <td>@longestMessage.map(tpl => tpl._1.message).getOrElse("No data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+  </tr>
+</table>
+
+<h3>It is @longestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Can you believe it?</h3>
+
+<h2>The post with the shortest message in the database is:</h2>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>@shortestMessage.map(tpl => tpl._1.name).getOrElse("No Data")</td>
+    <td>@shortestMessage.map(tpl => tpl._1.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+  </tr>
+</table>
+
+<h3>It is @shortestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Is that it?</h3>
+
+<h2>Posts per user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Number of posts</th>
+  </tr>
+  @for(tuple <- postsPerUser) {
+    <tr>
+      <td>@tuple._1</td>
+      <td>@tuple._2</td>
+    </tr>
+  }
+</table>
+
+<h2>Total message characters per user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Total number of characters</th>
+  </tr>
+  @for(tuple <- totalMessageCharsPerUser) {
+  <tr>
+    <td>@tuple._1</td>
+    <td>@tuple._2</td>
+  </tr>
+  }
+</table>
+
+<h2>The most recent post made by each user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  @for(tuple <- recentPostByUser) {
+  <tr>
+    <td>@tuple._1</td>
+    <td>@tuple._2.map(post => post.message)</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
+  </tr>
+  }
+</table>
+
+}
