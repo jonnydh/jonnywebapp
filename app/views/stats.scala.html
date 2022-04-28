@@ -1,7 +1,7 @@
-@(oldestPost: DataModel,
+@(oldestPost: Option[DataModel],
 mostPosts: Tuple2[String, Int],
-longestMessage: Tuple2[DataModel, Int],
-shortestMessage: Tuple2[DataModel, Int],
+longestMessage: Option[Tuple2[DataModel, Int]],
+shortestMessage: Option[Tuple2[DataModel, Int]],
 postsPerUser: List[(String, Int)],
 totalMessageCharsPerUser: List[(String, Int)]
 )
@@ -16,17 +16,15 @@ totalMessageCharsPerUser: List[(String, Int)]
 <table class="table">
   <tr>
     <th>Name</th>
-    <th>Age</th>
     <th>Message</th>
     <th>Time</th>
     <th>Date</th>
   </tr>
   <tr>
-    <td>@oldestPost.name</td>
-    <td>@oldestPost.age</td>
-    <td>@oldestPost.message</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(oldestPost.timestamp)</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(oldestPost.timestamp)</td>
+    <td>@oldestPost.map(post => post.name).getOrElse("No Data")</td>
+    <td>@oldestPost.map(post => post.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
@@ -48,42 +46,38 @@ totalMessageCharsPerUser: List[(String, Int)]
 <table class="table">
   <tr>
     <th>Name</th>
-    <th>Age</th>
     <th>Message</th>
     <th>Time</th>
     <th>Date</th>
   </tr>
   <tr>
-    <td>@longestMessage._1.name</td>
-    <td>@longestMessage._1.age</td>
-    <td>@longestMessage._1.message</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(longestMessage._1.timestamp)</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(longestMessage._1.timestamp)</td>
+    <td>@longestMessage.map(tpl => tpl._1.name).getOrElse("No data")</td>
+    <td>@longestMessage.map(tpl => tpl._1.message).getOrElse("No data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
-<h3>It is @longestMessage._2 characters long! Can you believe it?</h3>
+<h3>It is @longestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Can you believe it?</h3>
 
 <h2>The post with the shortest message in the database is:</h2>
 
 <table class="table">
   <tr>
     <th>Name</th>
-    <th>Age</th>
     <th>Message</th>
     <th>Time</th>
     <th>Date</th>
   </tr>
   <tr>
-    <td>@shortestMessage._1.name</td>
-    <td>@shortestMessage._1.age</td>
-    <td>@shortestMessage._1.message</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(shortestMessage._1.timestamp)</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(shortestMessage._1.timestamp)</td>
+    <td>@shortestMessage.map(tpl => tpl._1.name).getOrElse("No Data")</td>
+    <td>@shortestMessage.map(tpl => tpl._1.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
-<h3>It is @shortestMessage._2 characters long! Is that it?</h3>
+<h3>It is @shortestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Is that it?</h3>
 
 <h2>Posts per user:</h2>
 <table class="table">

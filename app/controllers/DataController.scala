@@ -14,16 +14,12 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
   }
 
   def stats() = Action {implicit request: Request[AnyContent] =>
-    dataService.isEmpty() match {
-      case true => Ok(views.html.emptystats())
-      case false => Ok(views.html.stats(dataService.firstPost(),
-                                        dataService.userWithMostPosts(),
-                                        dataService.longestMessage(),
-                                        dataService.shortestMessage(),
-                                        dataService.postsPerUser(),
-                                        dataService.totalCharsPerUser()
-                                        ))
-    }
+    Ok(views.html.stats(dataService.firstPost(),
+                                            dataService.userWithMostPosts(),
+                                            dataService.longestMessage(),
+                                            dataService.shortestMessage(),
+                                            dataService.postsPerUser(),
+                                            dataService.totalCharsPerUser()
+                                            ))
   }
-
 }

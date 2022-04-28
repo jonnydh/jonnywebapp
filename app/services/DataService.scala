@@ -1,8 +1,10 @@
 package services
 
 import controllers.DataModel
-import javax.inject._
 
+import javax.inject._
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ListBuffer
 
 @Singleton
@@ -11,10 +13,6 @@ class DataService @Inject() () {
 
   def insert(record: DataModel): Unit = {
     database += record
-  }
-
-  def isEmpty(): Boolean = {
-    database.isEmpty
   }
 
   def search(maybeName: Option[String] = None, maybeAge: Option[String], maybeMessage: Option[String]): ListBuffer[DataModel] = {
@@ -27,22 +25,28 @@ class DataService @Inject() () {
     database.filter(record => predicates.forall(predicate => predicate(record)))
   }
 
-  def firstPost(): DataModel = database.head
+  def firstPost(): Option[DataModel] = database.headOption
 
   def userWithMostPosts(): (String, Int) = database.groupBy(identity => identity.name)
     .view.mapValues(_.size)
-    .maxBy(_._2)
+    .maxByOption(_._2)
+    .getOrElse(("No Data", 0))
 
-  def longestMessage(): (DataModel, Int) = {
-    val post = database.sortBy(record => record.message.length()).last
-    val messageLength = post.message.length
-    (post, messageLength)
+
+  def longestMessage(): Option[(DataModel, Int)] = {
+    val post: Option[DataModel] = database
+      .sortBy(record => record.message.length())
+      .lastOption
+
+    post.map(p => (p, p.message.length))
   }
 
-  def shortestMessage(): (DataModel, Int) = {
-    val post = database.sortBy(record => record.message.length()).head
-    val messageLength = post.message.length
-    (post, messageLength)
+  def shortestMessage(): Option[(DataModel, Int)] = {
+    val post = database
+      .sortBy(record => record.message.length())
+      .headOption
+
+    post.map(p => (p, p.message.length))
   }
 
   def postsPerUser(): List[(String, Int)] = database.groupBy(identity => identity.name)
