@@ -7,6 +7,18 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ListBuffer
 
+case class StatsModel(
+                       firstPost: Option[DataModel],
+                       userWithMostPosts: (String, Int),
+                       longestMessage: Option[(DataModel, Int)],
+                       shortestMessage: Option[(DataModel, Int)],
+                       postsPerUser: List[(String, Int)],
+                       totalCharsPerUser: List[(String, Int)],
+                       mostRecentPostByUser: List[(String, Option[DataModel])]
+                     )
+
+
+
 @Singleton
 class DataService @Inject() () {
   val database = new ListBuffer[DataModel]()
@@ -14,6 +26,16 @@ class DataService @Inject() () {
   def insert(record: DataModel): Unit = {
     database += record
   }
+
+  def populateStats() = StatsModel(
+    userWithMostPosts = userWithMostPosts(),
+    firstPost = firstPost(),
+    longestMessage = longestMessage(),
+    shortestMessage = shortestMessage(),
+    postsPerUser = postsPerUser(),
+    totalCharsPerUser = totalCharsPerUser(),
+    mostRecentPostByUser = mostRecentPostByUser()
+  )
 
   def search(maybeName: Option[String] = None, maybeAge: Option[String], maybeMessage: Option[String]): ListBuffer[DataModel] = {
     val predicates: List[DataModel => Boolean] = List(

@@ -1,11 +1,4 @@
-@(oldestPost: Option[DataModel],
-mostPosts: Tuple2[String, Int],
-longestMessage: Option[Tuple2[DataModel, Int]],
-shortestMessage: Option[Tuple2[DataModel, Int]],
-postsPerUser: List[(String, Int)],
-totalMessageCharsPerUser: List[(String, Int)],
-recentPostByUser: List[(String, Option[DataModel])]
-)
+@(StatsModel: services.StatsModel)
 
 @import viewHelpers.formatHelper
 
@@ -22,10 +15,10 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>Date</th>
   </tr>
   <tr>
-    <td>@oldestPost.map(post => post.name).getOrElse("No Data")</td>
-    <td>@oldestPost.map(post => post.message).getOrElse("No Data")</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(oldestPost.map(post => post.timestamp).getOrElse(None))</td>
+    <td>@StatsModel.firstPost.map(post => post.name).getOrElse("No Data")</td>
+    <td>@StatsModel.firstPost.map(post => post.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.firstPost.map(post => post.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.firstPost.map(post => post.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
@@ -37,8 +30,8 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>Number of posts</th>
   </tr>
   <tr>
-    <td>@mostPosts._1</td>
-    <td>@mostPosts._2</td>
+    <td>@StatsModel.userWithMostPosts._1</td>
+    <td>@StatsModel.userWithMostPosts._2</td>
   </tr>
 </table>
 
@@ -52,14 +45,14 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>Date</th>
   </tr>
   <tr>
-    <td>@longestMessage.map(tpl => tpl._1.name).getOrElse("No data")</td>
-    <td>@longestMessage.map(tpl => tpl._1.message).getOrElse("No data")</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@StatsModel.longestMessage.map(tpl => tpl._1.name).getOrElse("No data")</td>
+    <td>@StatsModel.longestMessage.map(tpl => tpl._1.message).getOrElse("No data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
-<h3>It is @longestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Can you believe it?</h3>
+<h3>It is @StatsModel.longestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Can you believe it?</h3>
 
 <h2>The post with the shortest message in the database is:</h2>
 
@@ -71,14 +64,14 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>Date</th>
   </tr>
   <tr>
-    <td>@shortestMessage.map(tpl => tpl._1.name).getOrElse("No Data")</td>
-    <td>@shortestMessage.map(tpl => tpl._1.message).getOrElse("No Data")</td>
-    <td>@viewHelpers.formatHelper.timeFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
-    <td>@viewHelpers.formatHelper.dateFormatter(shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@StatsModel.shortestMessage.map(tpl => tpl._1.name).getOrElse("No Data")</td>
+    <td>@StatsModel.shortestMessage.map(tpl => tpl._1.message).getOrElse("No Data")</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
   </tr>
 </table>
 
-<h3>It is @shortestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Is that it?</h3>
+<h3>It is @StatsModel.shortestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Is that it?</h3>
 
 <h2>Posts per user:</h2>
 <table class="table">
@@ -86,7 +79,7 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>User</th>
     <th>Number of posts</th>
   </tr>
-  @for(tuple <- postsPerUser) {
+  @for(tuple <- StatsModel.postsPerUser) {
     <tr>
       <td>@tuple._1</td>
       <td>@tuple._2</td>
@@ -100,7 +93,7 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>User</th>
     <th>Total number of characters</th>
   </tr>
-  @for(tuple <- totalMessageCharsPerUser) {
+  @for(tuple <- StatsModel.totalCharsPerUser) {
   <tr>
     <td>@tuple._1</td>
     <td>@tuple._2</td>
@@ -116,7 +109,7 @@ recentPostByUser: List[(String, Option[DataModel])]
     <th>Time</th>
     <th>Date</th>
   </tr>
-  @for(tuple <- recentPostByUser) {
+  @for(tuple <- StatsModel.mostRecentPostByUser) {
   <tr>
     <td>@tuple._1</td>
     <td>@tuple._2.map(post => post.message)</td>

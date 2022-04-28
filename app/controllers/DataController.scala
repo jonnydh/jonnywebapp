@@ -14,15 +14,7 @@ class DataController @Inject() (dataService: DataService, cc: ControllerComponen
   }
 
   def stats() = Action {implicit request: Request[AnyContent] =>
-    Ok(views.html.stats(
-                        dataService.firstPost(),
-                        dataService.userWithMostPosts(),
-                        dataService.longestMessage(),
-                        dataService.shortestMessage(),
-                        dataService.postsPerUser(),
-                        dataService.totalCharsPerUser(),
-                        dataService.mostRecentPostByUser()
-                        )
+    Ok(views.html.stats(dataService.populateStats())
     )
   }
 }
