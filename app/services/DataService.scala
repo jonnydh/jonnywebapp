@@ -35,17 +35,16 @@ class DataService @Inject() () {
 
   def longestMessage(): Option[(DataModel, Int)] = {
     val post: Option[DataModel] = database
-      .sortBy(record => record.message.length())
-      .lastOption
+      .foldLeft(Option.empty[DataModel]) {(acc, cur) => acc match {
+        case None => Option(cur)
+        case Some(prev) => if (cur.message.length > prev.message.length) Some(cur) else acc
+      }}
 
     post.map(p => (p, p.message.length))
   }
 
   def shortestMessage(): Option[(DataModel, Int)] = {
-    val post = database
-      .sortBy(record => record.message.length())
-      .headOption
-
+    val post = database.minByOption(record => record.message.length)
     post.map(p => (p, p.message.length))
   }
 
@@ -61,5 +60,11 @@ class DataService @Inject() () {
     .map(tup => (tup._1, tup._2.reduce((a,b) => a + b)))
     .sortBy(_._2)
     .reverse
+
+  def mostRecentPostByUser(): List[(String, Option[DataModel])] = database.groupBy(identity => identity.name)
+    .view.mapValues(list => list.foldLeft(Option.empty[DataModel]) {(acc, cur) => acc match {
+      case None => Option(cur)
+      case Some(prev) => if (cur.timestamp.get.isAfter(prev.timestamp.get)) Some(cur) else acc
+    }}).toList
 
 }

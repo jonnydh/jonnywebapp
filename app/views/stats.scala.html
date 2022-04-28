@@ -3,7 +3,8 @@ mostPosts: Tuple2[String, Int],
 longestMessage: Option[Tuple2[DataModel, Int]],
 shortestMessage: Option[Tuple2[DataModel, Int]],
 postsPerUser: List[(String, Int)],
-totalMessageCharsPerUser: List[(String, Int)]
+totalMessageCharsPerUser: List[(String, Int)],
+recentPostByUser: List[(String, Option[DataModel])]
 )
 
 @import viewHelpers.formatHelper
@@ -103,6 +104,24 @@ totalMessageCharsPerUser: List[(String, Int)]
   <tr>
     <td>@tuple._1</td>
     <td>@tuple._2</td>
+  </tr>
+  }
+</table>
+
+<h2>The most recent post made by each user:</h2>
+<table class="table">
+  <tr>
+    <th>User</th>
+    <th>Message</th>
+    <th>Time</th>
+    <th>Date</th>
+  </tr>
+  @for(tuple <- recentPostByUser) {
+  <tr>
+    <td>@tuple._1</td>
+    <td>@tuple._2.map(post => post.message)</td>
+    <td>@viewHelpers.formatHelper.timeFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
+    <td>@viewHelpers.formatHelper.dateFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
   </tr>
   }
 </table>
