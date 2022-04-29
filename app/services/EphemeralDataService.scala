@@ -20,7 +20,7 @@ case class StatsModel(
 
 
 @Singleton
-class DataService @Inject() () {
+class EphemeralDataService @Inject() () {
   val database = new ListBuffer[DataModel]()
 
   def insert(record: DataModel): Unit = {

@@ -2,7 +2,7 @@
 
 @main("Form entry") {
 <h1>Welcome to Jonny's Form page!!!</h1>
-    @helper.form(action = routes.FormController.formPost()) {
+    @helper.form(action = routes.EphemeralFormController.formPost()) {
         @helper.CSRF.formField
         @helper.inputText(dataForm("name"))
         @helper.inputText(dataForm("age"))

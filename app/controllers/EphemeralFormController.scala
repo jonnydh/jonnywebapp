@@ -6,7 +6,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import play.api.data.validation.Constraints._
-import services.DataService
+import services.EphemeralDataService
 
 import scala.collection.mutable.ListBuffer
 import java.time.LocalDateTime
@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 case class DataModel(name: String, age: Int, message: String, timestamp: Option[LocalDateTime])
 
 @Singleton
-class FormController @Inject() (dataService: DataService, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class EphemeralFormController @Inject() (ephemeralDataService: EphemeralDataService, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   val dataForm = Form(
     mapping(
@@ -28,18 +28,18 @@ class FormController @Inject() (dataService: DataService, cc: ControllerComponen
   def incrementor(num: Int): Int = num + 1
 
   def form() = Action { implicit request =>
-    Ok(views.html.form(dataForm))
+    Ok(views.html.ephemeralForm(dataForm))
   }
 
   def formPost() = Action { implicit request =>
     dataForm.bindFromRequest.fold(
       formWithErrors => {
-        BadRequest(views.html.form(formWithErrors))
+        BadRequest(views.html.ephemeralForm(formWithErrors))
       },
       formSuccess => {
         val dateTime = LocalDateTime.now()
         val timestampedForm = formSuccess.copy(timestamp = Option(dateTime))
-        dataService.insert(timestampedForm)
+        ephemeralDataService.insert(timestampedForm)
         Redirect(routes.HomeController.index())
       }
     )
