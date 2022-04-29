@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mongo Form</title>
-</head>
-<body>
+@(dataForm: Form[MongoModel])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
 
-</body>
-</html>
+@main("Form entry") {
+<h1>Welcome to Jonny's Form page!!!</h1>
+@helper.form(action = routes.MongoFormController.formPost()) {
+@helper.CSRF.formField
+@helper.inputText(dataForm("name"))
+@helper.inputText(dataForm("age"))
+@helper.inputText(dataForm("message"))
+
+<input type="submit" value="Submit">
+}
+}
