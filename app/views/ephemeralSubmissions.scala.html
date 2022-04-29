@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
 <h1>This is where the data will be returned</h1>
 
-@helper.form(action = routes.DataController.submissions()) {
+@helper.form(action = routes.EphemeralDataController.submissions()) {
     <label for="name">Filter by name:</label><br><br>
     <input type="text" name="name" id="name"><br><br>
     <label for="age">Filter by age:</label><br><br>
