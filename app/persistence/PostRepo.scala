@@ -104,16 +104,4 @@ class PostRepo @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionC
       ),
       sort(Sorts.descending("timestamp"))
     )).toFuture()
-
-
-
-
-
-
 }
-
-
-
-
-
-
