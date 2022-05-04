@@ -14,6 +14,8 @@ GET     /submissions                controllers.EphemeralDataController.submissi
 GET     /stats                      controllers.EphemeralDataController.stats()
 
 GET     /mongo/form                 controllers.MongoFormController.form()
+POST    /mongo/form                       controllers.MongoFormController.formPost()
+
 GET     /mongo/submissions          controllers.MongoDataController.submissions(name: Option[String] ?= None, age: Option[String] ?= None, message: Option[String] ?= None)
 GET     /mongo/stats                controllers.MongoDataController.stats()
 

@@ -1,10 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mongo Stats</title>
-</head>
-<body>
+@(StatsModel: MongoStatsModel)
 
-</body>
-</html>
+@import viewHelpers.formatHelper
+
+@main("Jonny Stats Page") {
+
+<link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/table.css")" />
+<h1>The oldest post in the database is:</h1>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Message</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+    <tr>
+        <td>@StatsModel.firstPost.map(post => post.name).getOrElse("No Data")</td>
+        <td>@StatsModel.firstPost.map(post => post.message).getOrElse("No Data")</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.firstPost.map(post => post.timestamp).getOrElse(None))</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.firstPost.map(post => post.timestamp).getOrElse(None))</td>
+    </tr>
+</table>
+
+<h2>The user with the most posts is:</h2>
+
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Number of posts</th>
+    </tr>
+    <tr>
+        <td>@StatsModel.mostPosts.map(tup => tup._1).getOrElse("No Data")</td>
+        <td>@StatsModel.mostPosts.map(tup => tup._2).getOrElse(0)</td>
+    </tr>
+</table>
+
+<h2>The post with the longest message in the database is:</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Message</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+    <tr>
+        <td>@StatsModel.longestMessage.map(post => post.name).getOrElse("No data")</td>
+        <td>@StatsModel.longestMessage.map(post => post.message).getOrElse("No data")</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.longestMessage.map(post => post.timestamp).getOrElse(None))</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.longestMessage.map(post => post.timestamp).getOrElse(None))</td>
+    </tr>
+</table>
+
+<h3>It is @StatsModel.longestMessage.map(post => post.message.length).getOrElse(0) characters long! Can you believe it?</h3>
+
+<h2>The post with the shortest message in the database is:</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Message</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+    <tr>
+        <td>@StatsModel.shortestMessage.map(post => post.name).getOrElse("No Data")</td>
+        <td>@StatsModel.shortestMessage.map(post => post.message).getOrElse("No Data")</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.shortestMessage.map(post => post.timestamp).getOrElse(None))</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.shortestMessage.map(post => post.timestamp).getOrElse(None))</td>
+    </tr>
+</table>
+
+<h3>It is @StatsModel.shortestMessage.map(post => post.message.length).getOrElse(0) characters long! Is that it?</h3>
+
+<h2>Posts per user:</h2>
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Number of posts</th>
+    </tr>
+    @for(tuple <- StatsModel.postsPerUser) {
+    <tr>
+        <td>@tuple._1</td>
+        <td>@tuple._2</td>
+    </tr>
+    }
+</table>
+
+<h2>Total message characters per user:</h2>
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Total number of characters</th>
+    </tr>
+    @for(tuple <- StatsModel.totalCharsPerUser) {
+    <tr>
+        <td>@tuple._1</td>
+        <td>@tuple._2</td>
+    </tr>
+    }
+</table>
+
+<h2>The most recent post made by each user:</h2>
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Message</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+    @for(post <- StatsModel.mostRecentPostByUser) {
+    <tr>
+        <td>@post.name</td>
+        <td>@post.message</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(post.timestamp)</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(post.timestamp)</td>
+    </tr>
+    }
+</table>
+}
