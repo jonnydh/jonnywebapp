@@ -31,7 +31,6 @@ class MongoFormController @Inject() (cc: ControllerComponents, postRepo: PostRep
   }
 
   def formPost() = Action.async { implicit request =>
-    println("testing")
     document.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(views.html.mongoForm(formWithErrors)))
@@ -39,8 +38,7 @@ class MongoFormController @Inject() (cc: ControllerComponents, postRepo: PostRep
       formSuccess => {
         val dateTime = LocalDateTime.now()
         val timestampedForm = formSuccess.copy(timestamp = Option(dateTime))
-        println("about to save")
-        postRepo.save(timestampedForm).map(_ => println("Save done")).map(_ => Redirect(routes.HomeController.index()))
+        postRepo.save(timestampedForm).map(_ => Redirect(routes.HomeController.index()))
       }
     )
   }

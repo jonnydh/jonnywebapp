@@ -1,4 +1,4 @@
-@(StatsModel: services.StatsModel)
+@(StatsModel: MongoStatsModel)
 
 @import viewHelpers.formatHelper
 
@@ -30,8 +30,8 @@
         <th>Number of posts</th>
     </tr>
     <tr>
-        <td>@StatsModel.userWithMostPosts._1</td>
-        <td>@StatsModel.userWithMostPosts._2</td>
+        <td>@StatsModel.mostPosts.map(tup => tup._1).getOrElse("No Data")</td>
+        <td>@StatsModel.mostPosts.map(tup => tup._2).getOrElse(0)</td>
     </tr>
 </table>
 
@@ -45,14 +45,14 @@
         <th>Date</th>
     </tr>
     <tr>
-        <td>@StatsModel.longestMessage.map(tpl => tpl._1.name).getOrElse("No data")</td>
-        <td>@StatsModel.longestMessage.map(tpl => tpl._1.message).getOrElse("No data")</td>
-        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
-        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.longestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+        <td>@StatsModel.longestMessage.map(post => post.name).getOrElse("No data")</td>
+        <td>@StatsModel.longestMessage.map(post => post.message).getOrElse("No data")</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.longestMessage.map(post => post.timestamp).getOrElse(None))</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.longestMessage.map(post => post.timestamp).getOrElse(None))</td>
     </tr>
 </table>
 
-<h3>It is @StatsModel.longestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Can you believe it?</h3>
+<h3>It is @StatsModel.longestMessage.map(post => post.message.length).getOrElse(0) characters long! Can you believe it?</h3>
 
 <h2>The post with the shortest message in the database is:</h2>
 
@@ -64,14 +64,14 @@
         <th>Date</th>
     </tr>
     <tr>
-        <td>@StatsModel.shortestMessage.map(tpl => tpl._1.name).getOrElse("No Data")</td>
-        <td>@StatsModel.shortestMessage.map(tpl => tpl._1.message).getOrElse("No Data")</td>
-        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
-        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.shortestMessage.map(tpl => tpl._1.timestamp).getOrElse(None))</td>
+        <td>@StatsModel.shortestMessage.map(post => post.name).getOrElse("No Data")</td>
+        <td>@StatsModel.shortestMessage.map(post => post.message).getOrElse("No Data")</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(StatsModel.shortestMessage.map(post => post.timestamp).getOrElse(None))</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(StatsModel.shortestMessage.map(post => post.timestamp).getOrElse(None))</td>
     </tr>
 </table>
 
-<h3>It is @StatsModel.shortestMessage.map(tpl => tpl._2).getOrElse(0) characters long! Is that it?</h3>
+<h3>It is @StatsModel.shortestMessage.map(post => post.message.length).getOrElse(0) characters long! Is that it?</h3>
 
 <h2>Posts per user:</h2>
 <table class="table">
@@ -109,14 +109,13 @@
         <th>Time</th>
         <th>Date</th>
     </tr>
-    @for(tuple <- StatsModel.mostRecentPostByUser) {
+    @for(post <- StatsModel.mostRecentPostByUser) {
     <tr>
-        <td>@tuple._1</td>
-        <td>@tuple._2.map(post => post.message)</td>
-        <td>@viewHelpers.formatHelper.timeFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
-        <td>@viewHelpers.formatHelper.dateFormatter(tuple._2.map(record => record.timestamp).getOrElse(None))</td>
+        <td>@post.name</td>
+        <td>@post.message</td>
+        <td>@viewHelpers.formatHelper.timeFormatter(post.timestamp)</td>
+        <td>@viewHelpers.formatHelper.dateFormatter(post.timestamp)</td>
     </tr>
     }
 </table>
-
 }
